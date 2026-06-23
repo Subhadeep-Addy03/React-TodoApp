@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TodoList = ({todo}) => {
+const TodoList = ({ todo }) => {
     return (
         <>
             <div className='text-center mt-4'>
