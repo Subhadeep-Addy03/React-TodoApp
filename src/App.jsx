@@ -65,6 +65,43 @@
 
 //Local Storage
 
+// import React, { useEffect, useState } from 'react'
+// import TodoForm from './components/TodoForm'
+// import TodoList from './components/TodoList'
+
+// const App = () => {
+
+//   const [todo, setTodo] = useState(() => {
+//     const saveTodo = localStorage.getItem("TodoFolder")
+//     return saveTodo ? JSON.parse(saveTodo) : []
+//   })
+
+//   function addTodo(val) {
+//     if (val.trim() === "") {
+//       alert("Please Enter The Task")
+//       return
+//     }
+//     setTodo([...todo, { title: val, id: Date.now() }])
+//   }
+
+//   useEffect(() => {
+//     localStorage.setItem("TodoFolder", JSON.stringify(todo));
+//   }, [todo])
+
+//   return (
+//     <>
+//       <div className='text-center mt-32 text-4xl font-bold'>Todo List</div>
+//       <TodoForm addTodo={addTodo} />
+//       <TodoList todo={todo} />
+//     </>
+//   )
+// }
+
+// export default App
+
+
+//Delete Todo 
+
 import React, { useEffect, useState } from 'react'
 import TodoForm from './components/TodoForm'
 import TodoList from './components/TodoList'
@@ -84,6 +121,10 @@ const App = () => {
     setTodo([...todo, { title: val, id: Date.now() }])
   }
 
+  function delTodo(id) {
+    setTodo(todo.filter((item) => item.id !== id))
+  }
+
   useEffect(() => {
     localStorage.setItem("TodoFolder", JSON.stringify(todo));
   }, [todo])
@@ -92,7 +133,7 @@ const App = () => {
     <>
       <div className='text-center mt-32 text-4xl font-bold'>Todo List</div>
       <TodoForm addTodo={addTodo} />
-      <TodoList todo={todo} />
+      <TodoList todo={todo} delTodo={delTodo} />
     </>
   )
 }
