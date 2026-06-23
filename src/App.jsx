@@ -105,6 +105,7 @@
 import React, { useEffect, useState } from 'react'
 import TodoForm from './components/TodoForm'
 import TodoList from './components/TodoList'
+import toast from 'react-hot-toast'
 
 const App = () => {
 
@@ -119,10 +120,12 @@ const App = () => {
       return
     }
     setTodo([...todo, { title: val, id: Date.now() }])
+    toast.success("Todo Added Success !")
   }
 
   function delTodo(id) {
     setTodo(todo.filter((item) => item.id !== id))
+    toast.success("One Todo Deleted !")
   }
 
   useEffect(() => {
