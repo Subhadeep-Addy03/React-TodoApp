@@ -102,43 +102,107 @@
 
 //Delete Todo 
 
+// import React, { useEffect, useState } from 'react'
+// import TodoForm from './components/TodoForm'
+// import TodoList from './components/TodoList'
+// import toast from 'react-hot-toast'
+
+// const App = () => {
+
+//   const [todo, setTodo] = useState(() => {
+//     const saveTodo = localStorage.getItem("TodoFolder")
+//     return saveTodo ? JSON.parse(saveTodo) : []
+//   })
+
+//   function addTodo(val) {
+//     if (val.trim() === "") {
+//       alert("Please Enter The Task")
+//       return
+//     }
+//     setTodo([...todo, { title: val, id: Date.now() }])
+//     toast.success("Todo Added Success !")
+//   }
+
+//   function delTodo(id) {
+//     setTodo(todo.filter((item) => item.id !== id))
+//     toast.success("One Todo Deleted !")
+//   }
+
+//   useEffect(() => {
+//     localStorage.setItem("TodoFolder", JSON.stringify(todo));
+//   }, [todo])
+
+//   return (
+//     <>
+//       <div className='text-center mt-32 text-4xl font-bold'>Todo List</div>
+//       <TodoForm addTodo={addTodo} />
+//       <TodoList todo={todo} delTodo={delTodo} />
+//     </>
+//   )
+// }
+
+// export default App
+
+//Delete Todo Using Model
+
 import React, { useEffect, useState } from 'react'
 import TodoForm from './components/TodoForm'
 import TodoList from './components/TodoList'
 import toast from 'react-hot-toast'
+import DeleteModal from './components/DeleteModal'
 
 const App = () => {
 
-  const [todo, setTodo] = useState(() => {
-    const saveTodo = localStorage.getItem("TodoFolder")
-    return saveTodo ? JSON.parse(saveTodo) : []
-  })
+    const [todo, setTodo] = useState(() => {
+        const saveTodo = localStorage.getItem("TodoFolder")
+        return saveTodo ? JSON.parse(saveTodo) : []
+    })
 
-  function addTodo(val) {
-    if (val.trim() === "") {
-      alert("Please Enter The Task")
-      return
+    //Del Modal
+    const [delModel, setDelModel] = useState(false)
+    const [todoToDel, setTodoToDel] = useState(null)
+
+    function handleDel(id) {
+        setDelModel(true)
+        setTodoToDel(id)
     }
-    setTodo([...todo, { title: val, id: Date.now() }])
-    toast.success("Todo Added Success !")
-  }
 
-  function delTodo(id) {
-    setTodo(todo.filter((item) => item.id !== id))
-    toast.success("One Todo Deleted !")
-  }
+    function cancelDel() {
+        setDelModel(false)
+        setTodoToDel(null)
+    }
+    
+    function confirmDel() {
+        setTodo(todo.filter((item) => item.id !== todoToDel))
+        setDelModel(false)
+        setTodoToDel(null)
+    }
 
-  useEffect(() => {
-    localStorage.setItem("TodoFolder", JSON.stringify(todo));
-  }, [todo])
 
-  return (
-    <>
-      <div className='text-center mt-32 text-4xl font-bold'>Todo List</div>
-      <TodoForm addTodo={addTodo} />
-      <TodoList todo={todo} delTodo={delTodo} />
-    </>
-  )
+    function addTodo(val) {
+        if (val.trim() === "") {
+            alert("Please Enter The Task")
+            return
+        }
+        setTodo([...todo, { title: val, id: Date.now() }])
+        toast.success("Todo Added Success !")
+    }
+
+    useEffect(() => {
+        localStorage.setItem("TodoFolder", JSON.stringify(todo));
+    }, [todo])
+
+    return (
+        <>
+            <div className='text-center mt-32 text-4xl font-bold'>Todo List</div>
+            <TodoForm addTodo={addTodo} />
+            <TodoList todo={todo} delTodo={handleDel} />
+
+            {
+                delModel && <DeleteModal cancelDel={cancelDel} confirmDel={confirmDel} />
+            }
+        </>
+    )
 }
 
 export default App
