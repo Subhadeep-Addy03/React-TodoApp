@@ -2,9 +2,12 @@ import React from 'react';
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { MdEditSquare } from "react-icons/md";
 
-const TodoList = ({ todo, delTodo }) => {
+const TodoList = ({ todo, delTodo,editTodo }) => {
     function handleDel(id) {
         delTodo(id)
+    }
+    function handleUpdate(todo) {
+        editTodo(todo)
     }
     return (
         <>
@@ -16,11 +19,13 @@ const TodoList = ({ todo, delTodo }) => {
                             <div className='w=[40%] flex '>
                                 <div className='w-[60%] ml-2'>{item.title}</div>
                                 <div className='w-[10%]'>
+
+                                    <button onClick={() => handleUpdate(item)} className='rounded bg-green-500 p-1 hover:bg-green-300 text-white hover:text-black'><MdEditSquare />
+                                    </button>
+
                                     <button className='rounded bg-red-500 ml-3 p-1 hover:bg-red-300 text-white hover:text-black me-2' onClick={() => handleDel(item.id)}><RiDeleteBin5Fill />
                                     </button>
 
-                                    <button className='rounded bg-green-500 p-1 hover:bg-green-300 text-white hover:text-black'><MdEditSquare />
-                                    </button>
                                 </div>
 
 

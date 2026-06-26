@@ -145,11 +145,76 @@
 
 //Delete Todo Using Model
 
+// import React, { useEffect, useState } from 'react'
+// import TodoForm from './components/TodoForm'
+// import TodoList from './components/TodoList'
+// import toast from 'react-hot-toast'
+// import DeleteModal from './components/DeleteModal'
+
+// const App = () => {
+
+//     const [todo, setTodo] = useState(() => {
+//         const saveTodo = localStorage.getItem("TodoFolder")
+//         return saveTodo ? JSON.parse(saveTodo) : []
+//     })
+
+//     //Del Modal
+//     const [delModel, setDelModel] = useState(false)
+//     const [todoToDel, setTodoToDel] = useState(null)
+
+//     function handleDel(id) {
+//         setDelModel(true)
+//         setTodoToDel(id)
+//     }
+
+//     function cancelDel() {
+//         setDelModel(false)
+//         setTodoToDel(null)
+//     }
+
+//     function confirmDel() {
+//         setTodo(todo.filter((item) => item.id !== todoToDel))
+//         setDelModel(false)
+//         setTodoToDel(null)
+//     }
+
+
+//     function addTodo(val) {
+//         if (val.trim() === "") {
+//             alert("Please Enter The Task")
+//             return
+//         }
+//         setTodo([...todo, { title: val, id: Date.now() }])
+//         toast.success("Todo Added Success !")
+//     }
+
+//     useEffect(() => {
+//         localStorage.setItem("TodoFolder", JSON.stringify(todo));
+//     }, [todo])
+
+//     return (
+//         <>
+//             <div className='text-center mt-32 text-4xl font-bold'>Todo List</div>
+//             <TodoForm addTodo={addTodo} />
+//             <TodoList todo={todo} delTodo={handleDel} />
+
+//             {
+//                 delModel && <DeleteModal cancelDel={cancelDel} confirmDel={confirmDel} />
+//             }
+//         </>
+//     )
+// }
+
+// export default App
+
+//Edit Todo Using Modal 
+
 import React, { useEffect, useState } from 'react'
 import TodoForm from './components/TodoForm'
 import TodoList from './components/TodoList'
 import toast from 'react-hot-toast'
 import DeleteModal from './components/DeleteModal'
+import UpdatingModal from './components/UpdatingModal'
 
 const App = () => {
 
@@ -171,13 +236,36 @@ const App = () => {
         setDelModel(false)
         setTodoToDel(null)
     }
-    
+
     function confirmDel() {
         setTodo(todo.filter((item) => item.id !== todoToDel))
         setDelModel(false)
         setTodoToDel(null)
+        toast.success("Todo Deleted")
     }
 
+    //Edit Using Modal
+
+    const [editModal, setEditModal] = useState(false)
+    const [todoToEdit, setTodoToEdit] = useState(null)
+
+    function handleEdit(todo) {
+        setEditModal(true)
+        setTodoToEdit(todo)
+    }
+
+    function cancelEdit() {
+        setEditModal(false)
+        setTodoToEdit(null)
+    }
+
+    function confirmEdit(newTitle) {
+        setTodo(todo.map((todo) => todo.id === todoToEdit.id ? { title: newTitle } : todo))
+        setEditModal(false)
+        setTodoToEdit(null)
+        toast.success("Todo Updated Success")
+
+    }
 
     function addTodo(val) {
         if (val.trim() === "") {
@@ -196,10 +284,14 @@ const App = () => {
         <>
             <div className='text-center mt-32 text-4xl font-bold'>Todo List</div>
             <TodoForm addTodo={addTodo} />
-            <TodoList todo={todo} delTodo={handleDel} />
+            <TodoList todo={todo} delTodo={handleDel} editTodo={handleEdit} />
 
             {
                 delModel && <DeleteModal cancelDel={cancelDel} confirmDel={confirmDel} />
+            }
+
+            {
+                editModal && <UpdatingModal cancelEdit={cancelEdit} currentValue={todoToEdit.title} confirmEdit={confirmEdit} />
             }
         </>
     )
